@@ -26,18 +26,29 @@ class HASC:
 
         return {"data": data, "activity": labels["act"].values.tolist(), "person": labels["person"].values.tolist()}
 
-    def __load(self, window_size=256, stride=256):
+    def __load(self, window_size=512, stride=512):
         """
         時系列分割する
         :return:
         """
         raw_data = self.__load_hasc()
 
+        if window_size == 512 and stride == 512:
+            data = [data_.values for data_ in raw_data["data"]]
+            data = np.array(data)
+            target = np.array(raw_data["activity"])
+
+            return data, target, raw_data["person"]
+
+        """
+        コンペ的には以降のコードは必要ない
+        """
         data = []
         target = []
         subject = []
 
         for data_, label_, person_ in zip(raw_data["data"], raw_data["activity"], raw_data["person"]):
+
             split_data = sensorutils.to_frames(data_.values, window_size=window_size, stride=stride)
 
             target_ = [label_] * len(split_data)
@@ -63,4 +74,4 @@ class HASC:
 
 if __name__ == "__main__":
     hasc = HASC("./HASC_Apple_100/配布用/dataset_0")
-    data, target, subject = hasc.load()
+    data, target, subject = hasc.load(512, 512)

@@ -1,3 +1,6 @@
-[submodule "TensorFlow_CNN_Collections_for_HASC"]
-	path = TensorFlow_CNN_Collections_for_HASC
+[submodule "tfxtend"]
+	path = tfxtend
+	url = https://github.com/Shakshi3104/tfxtend.git
+[submodule "tensoract"]
+	path = tensoract
 	url = https://github.com/haselab-dev/TensorFlow_CNN_Collections_for_HASC.git
