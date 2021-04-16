@@ -9,6 +9,7 @@ from tensorflow.keras.optimizers import Adam
 import dataset
 
 from tensoract.applications.vgg16 import VGG16
+from tensoract.applications.mobilenet import MobileNet
 
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
 from tfxtend.keras.callbacks.benckmark import PerformanceLogger
@@ -49,7 +50,8 @@ if __name__ == "__main__":
     print(y_test_.shape)
 
     # Load model
-    model = VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:])
+    # model = VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:])
+    model = MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:])
     model.compile(optimizer=Adam(learning_rate=1e-3),
                   loss="categorical_crossentropy",
                   metrics=["accuracy"])
