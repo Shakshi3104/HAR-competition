@@ -17,19 +17,24 @@ stride = 512
 
 if __name__ == "__main__":
     # Set data path
-    path = "./HASC_Apple_100/配布用/dataset_0"
+    paths = ["./HASC_Apple_100/配布用/dataset_{}".format(i) for i in range(4)]
+
+    data = []
+    target = []
 
     # Load data
-    hasc = dataset.HASC(path)
-    data, target, subject = hasc.load(window_size, stride)
+    for path in paths:
+        hasc = dataset.HASC(path)
+        data_, target_, _ = hasc.load(window_size, stride)
 
-    # train-test split
-    train_person = hasc.person_list[:30]
-    train_index = [i for i, x in enumerate(subject) if x in train_person]
-    test_index = [i for i, x in enumerate(subject) if x not in train_person]
+        data.append(data_)
+        target.append(target_)
 
-    x_train, y_train = data[train_index], target[train_index]
-    x_test, y_test = data[test_index], target[test_index]
+    # train test
+    x_train = np.concatenate(data[:3])
+    y_train = np.concatenate(target[:3])
+    x_test = data[-1]
+    y_test = target[-1]
 
     # Feature extractor
     extractors = [

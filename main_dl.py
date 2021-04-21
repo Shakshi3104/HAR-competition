@@ -1,4 +1,3 @@
-import os
 import numpy as np
 
 import tensorflow as tf
@@ -14,7 +13,8 @@ from tensoract.applications.mobilenet import MobileNet
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
 from tfxtend.keras.callbacks.benckmark import PerformanceLogger
 
-# from models import PoolingNet
+from sklearn.metrics import accuracy_score
+from tfxtend.metrics import confusion_error_matrix
 
 CLASSES = 6
 window_size = 512
@@ -27,31 +27,34 @@ if __name__ == "__main__":
     print(tf.test.gpu_device_name())
 
     # Set data path
-    path = "./HASC_Apple_100/配布用/dataset_0"
+    paths = ["./HASC_Apple_100/配布用/dataset_{}".format(i) for i in range(4)]
+
+    data = []
+    target = []
 
     # Load data
-    hasc = dataset.HASC(path)
-    data, target, subject = hasc.load(window_size, stride)
+    for path in paths:
+        hasc = dataset.HASC(path)
+        data_, target_, _ = hasc.load(window_size, stride)
 
-    # Reshape
-    data = data.reshape(-1, window_size*3, 1)
-    target_ = to_categorical(target, num_classes=CLASSES)
-    print(data.shape)
-    print(target_.shape)
+        data.append(data_.reshape(-1, window_size*3, 1))
+        target.append(target_)
 
-    # train-test split
-    train_person = hasc.person_list[:30]
-    train_index = [i for i, x in enumerate(subject) if x in train_person]
-    test_index = [i for i, x in enumerate(subject) if x not in train_person]
+    # train test
+    x_train = np.concatenate(data[:3])
+    y_train = np.concatenate(target[:3])
+    x_test = data[-1]
+    y_test = target[-1]
 
-    x_train, y_train = data[train_index], target_[train_index]
-    x_test, y_test_, y_test = data[test_index], target_[test_index], target[test_index]
+    y_train = to_categorical(y_train, num_classes=CLASSES)
+    y_test_ = to_categorical(y_test, num_classes=CLASSES)
+
     print(x_train.shape)
     print(y_test_.shape)
 
     # Load model
-    # model = VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:])
-    model = MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:])
+    model = VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:])
+    # model = MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:])
     model.compile(optimizer=Adam(learning_rate=1e-3),
                   loss="categorical_crossentropy",
                   metrics=["accuracy"])
@@ -68,5 +71,14 @@ if __name__ == "__main__":
     stack = model.fit(x=x_train, y=y_train, batch_size=batch, epochs=epochs,
                       validation_data=(x_test, y_test_),
                       verbose=1, callbacks=[cf_callback, fm_callback, bench_callback])
+
+    predict = model(x_test)
+    predict = np.argmax(predict, axis=1)
+
+    accuracy = accuracy_score(y_test, predict)
+    print(accuracy)
+
+    cf = confusion_error_matrix(predict, y_test, target_names=["stay", "walk", "jog", "skip", "stUp", "stDown"])
+    print(cf)
 
 
