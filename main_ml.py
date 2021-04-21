@@ -6,6 +6,8 @@ from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 
+from tfxtend.metrics import confusion_error_matrix
+
 import dataset
 import features
 
@@ -59,3 +61,6 @@ if __name__ == "__main__":
     predict = pipeline.predict(x_test)
     accuracy = accuracy_score(y_test, predict)
     print(accuracy)
+
+    cf = confusion_error_matrix(predict, y_test, target_names=["stay", "walk", "jog", "skip", "stUp", "stDown"])
+    print(cf)
