@@ -6,17 +6,15 @@ import random
 
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, f1_score
 
 from tfxtend.metrics import confusion_error_matrix
 
 import dataset
 import features
+import metrics
 
 CLASSES = 6
-window_size = 512
-stride = 512
-
 SEED = 0
 
 if __name__ == "__main__":
@@ -24,25 +22,10 @@ if __name__ == "__main__":
     np.random.seed(SEED)
     random.seed(SEED)
 
-    # Set data path
-    paths = ["./HASC_Apple_100/配布用/dataset_{}".format(i) for i in range(4)]
-
-    data = []
-    target = []
-
-    # Load data
-    for path in paths:
-        hasc = dataset.HASC(path)
-        data_, target_, _ = hasc.load(window_size, stride)
-
-        data.append(data_)
-        target.append(target_)
-
-    # train test
-    x_train = np.concatenate(data[:3])
-    y_train = np.concatenate(target[:3])
-    x_test = data[-1]
-    y_test = target[-1]
+    # Load dataset
+    x_train, y_train, x_test, y_test = dataset.load_hasc()
+    print(x_train.shape)
+    print(y_test.shape)
 
     # Feature extractor
     extractors = [
@@ -61,7 +44,8 @@ if __name__ == "__main__":
         ('intensity', features.Feature(features.intensity)),
         ('skewness', features.Feature(features.skewness)),
         ('kurtosis', features.Feature(features.kurtosis)),
-        ('zcr', features.Feature(features.zcr))
+        ('zcr', features.Feature(features.zcr)),
+        ('power_spectrum_feature', features.Feature(features.fft_features))
     ]
     combined = FeatureUnion(extractors)
     # features = combined.fit_transform(data)
@@ -72,11 +56,13 @@ if __name__ == "__main__":
     pipeline = Pipeline([('feature_extractor', combined),
                          ('classifier', clf)])
 
+    # training
     pipeline.fit(x_train, y_train)
 
+    # predict
     predict = pipeline.predict(x_test)
-    accuracy = accuracy_score(y_test, predict)
-    print("{}%".format(accuracy * 100))
 
-    cf = confusion_error_matrix(predict, y_test, target_names=["stay", "walk", "jog", "skip", "stUp", "stDown"])
-    print(cf)
+    # calc metrics
+    metrics.calc_metrics(y_test, predict)
+
+    # test data for competition
