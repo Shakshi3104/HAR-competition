@@ -24,6 +24,11 @@ def test(model, path="./HASC_Apple_100/配布用/test/"):
     x = np.array([pd.read_csv(f).values.copy() for f in files])
 
     predict = model.predict(x)
+
+    # one-hot vectorの場合
+    if predict.shape == (len(predict), 6):
+        predict = np.argmax(predict, axis=1)
+
     result = pd.DataFrame()
     result['name'] = list(map(lambda x: x.name, files))
     result['pred'] = predict
