@@ -19,6 +19,7 @@ def calc_metrics(y_true, y_pred, labels=["stay", "walk", "jog", "skip", "stUp", 
 
 
 def test(model, path="./HASC_Apple_100/配布用/test/"):
+    print("evaluate test...")
     files = list(Path(path).glob('*.csv'))
     x = np.array([pd.read_csv(f).values.copy() for f in files])
 
@@ -26,4 +27,5 @@ def test(model, path="./HASC_Apple_100/配布用/test/"):
     result = pd.DataFrame()
     result['name'] = list(map(lambda x: x.name, files))
     result['pred'] = predict
+    print("write output.csv")
     result.to_csv('./HASC_Apple_100/配布用/output.csv', header=False, index=False)

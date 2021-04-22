@@ -6,9 +6,6 @@ import random
 
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.metrics import accuracy_score, f1_score
-
-from tfxtend.metrics import confusion_error_matrix
 
 import dataset
 import features
@@ -28,6 +25,7 @@ if __name__ == "__main__":
     print(y_test.shape)
 
     # Feature extractor
+    # 特徴量数 75 (time domain: 17*3 = 51, frequency domain: 8*3 = 24)
     extractors = [
         ('min', features.Feature(np.amin)),
         ('max', features.Feature(np.amax)),
@@ -45,13 +43,13 @@ if __name__ == "__main__":
         ('skewness', features.Feature(features.skewness)),
         ('kurtosis', features.Feature(features.kurtosis)),
         ('zcr', features.Feature(features.zcr)),
-        ('power_spectrum_feature', features.Feature(features.fft_features))
+        ('power_spectrum_features_8', features.Feature(features.fft_features))
     ]
     combined = FeatureUnion(extractors)
     # features = combined.fit_transform(data)
 
     # classifier
-    clf = RandomForestClassifier(n_estimators=100, max_depth=100, random_state=SEED)
+    clf = RandomForestClassifier(n_estimators=200, max_depth=100, random_state=SEED)
 
     pipeline = Pipeline([('feature_extractor', combined),
                          ('classifier', clf)])

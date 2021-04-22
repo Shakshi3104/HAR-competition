@@ -191,10 +191,10 @@ def fft_features(x, axis=0):
     power = abs_ ** 2
 
     # 周波数
-    ts = 1.0 / 100.0
-    freqs = np.fft.fftfreq(power.shape[0], ts)
-    idx = np.argsort(freqs)
-    freqs = freqs[idx]
+    # ts = 1.0 / 100.0
+    # freqs = np.fft.fftfreq(power.shape[0], ts)
+    # idx = np.argsort(freqs)
+    # freqs = freqs[idx]
 
     def power_max(power, axis=0):
         return np.max(power, axis=axis)
