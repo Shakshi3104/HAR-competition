@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     predict = pipeline.predict(x_test)
     accuracy = accuracy_score(y_test, predict)
-    print(accuracy)
+    print("{}%".format(accuracy * 100))
 
     cf = confusion_error_matrix(predict, y_test, target_names=["stay", "walk", "jog", "skip", "stUp", "stDown"])
     print(cf)

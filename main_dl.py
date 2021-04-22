@@ -83,7 +83,7 @@ if __name__ == "__main__":
     predict = np.argmax(predict, axis=1)
 
     accuracy = accuracy_score(y_test, predict)
-    print(accuracy)
+    print("{}%".format(accuracy * 100))
 
     cf = confusion_error_matrix(predict, y_test, target_names=["stay", "walk", "jog", "skip", "stUp", "stDown"])
     print(cf)
