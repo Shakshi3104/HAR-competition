@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import scipy.stats as sp
 
+import random
+
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
@@ -15,7 +17,13 @@ CLASSES = 6
 window_size = 512
 stride = 512
 
+SEED = 0
+
 if __name__ == "__main__":
+    # Set random seed
+    np.random.seed(SEED)
+    random.seed(SEED)
+
     # Set data path
     paths = ["./HASC_Apple_100/配布用/dataset_{}".format(i) for i in range(4)]
 
@@ -56,10 +64,13 @@ if __name__ == "__main__":
         ('zcr', features.Feature(features.zcr))
     ]
     combined = FeatureUnion(extractors)
-    # x = combined.fit_transform(data)
+    # features = combined.fit_transform(data)
+
+    # classifier
+    clf = RandomForestClassifier(n_estimators=100, max_depth=100, random_state=SEED)
 
     pipeline = Pipeline([('feature_extractor', combined),
-                         ('classifier', RandomForestClassifier(n_estimators=100, max_depth=100))])
+                         ('classifier', clf)])
 
     pipeline.fit(x_train, y_train)
 

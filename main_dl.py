@@ -1,4 +1,5 @@
 import numpy as np
+import random
 
 import tensorflow as tf
 
@@ -22,9 +23,15 @@ stride = 512
 batch = 256
 epochs = 100
 
+SEED = 0
+
 if __name__ == "__main__":
     print(tf.__version__)
     print(tf.test.gpu_device_name())
+
+    # Set random seed
+    np.random.seed(SEED)
+    random.seed(SEED)
 
     # Set data path
     paths = ["./HASC_Apple_100/配布用/dataset_{}".format(i) for i in range(4)]
