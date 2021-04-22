@@ -25,7 +25,8 @@ if __name__ == "__main__":
     print(y_test.shape)
 
     # Feature extractor
-    # 特徴量数 75 (time domain: 17*3 = 51, frequency domain: 8*3 = 24)
+    # 特徴量数 75 (time domain: 16*3 = 48, frequency domain: 8*3 = 24)
+
     extractors = [
         ('min', features.Feature(np.amin)),
         ('max', features.Feature(np.amax)),
@@ -48,6 +49,13 @@ if __name__ == "__main__":
     combined = FeatureUnion(extractors)
     # features = combined.fit_transform(data)
 
+    # 特徴量のリスト
+    features_list = [f[0] for f in combined.transformer_list[:-1]]
+    features_list += ["power_max", "power_2nd", "power_std", "power_first_quartiles", "power_median",
+                      "power_third_quartiles", "power_iqr", "power_corrcoef"]
+
+    features_list = ["{}-{}".format(axis, f) for f in features_list for axis in ["x", "y", "z"]]
+
     # classifier
     clf = RandomForestClassifier(n_estimators=200, max_depth=100, random_state=SEED)
 
@@ -65,3 +73,8 @@ if __name__ == "__main__":
 
     # test for competition
     utils.test(pipeline)
+
+    # importance
+    # importanceの値が高い順に特徴量をソートする
+    sorted_features_list = [f for (idx, f) in sorted(zip(np.argsort(clf.feature_importances_), features_list), reverse=True)]
+    print(sorted_features_list)
