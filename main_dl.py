@@ -49,10 +49,11 @@ if __name__ == "__main__":
                   metrics=["accuracy"])
 
     # Callbacks
+    label_list = ["stay", "walk", "jog", "skip", "stUp", "stDown"]
     cf_callback = ConfusionMatrixLogger(model, x_test, y_test,
-                                        label_list=hasc.label_list)
+                                        label_list=label_list)
     fm_callback = FMeasureLogger(model, x_test, y_test,
-                                 label_list=hasc.label_list)
+                                 label_list=label_list)
 
     bench_callback = PerformanceLogger()
 
@@ -66,4 +67,7 @@ if __name__ == "__main__":
 
     # calc metrics
     utils.calc_metrics(y_test, predict)
+
+    # test for competition
+    utils.test(model)
 
