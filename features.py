@@ -27,6 +27,19 @@ class Feature(BasePlumber):
 
 """
     特徴量は、3軸まとめてウィンドウごとに抽出する形で関数を書く
+    
+    Parameters
+    -------------
+    x: np.ndarray
+        x.shape = (ウィンドウサイズ, 3)
+    
+    axis: int, optional
+        特徴量を計算する軸, 使わなくても必要
+    
+    Returns
+    ------------
+    feature: np.ndarray
+        feature.shape = (特徴量の次元数,)
 """
 
 
@@ -169,3 +182,54 @@ def zcr(x, axis=0):
 
     zcr_ = np.array(zcr_)
     return zcr_
+
+
+def fft_features(x, axis=0):
+    # パワースペクトル
+    fft_ = np.fft.fft(x, axis=axis)
+    abs_ = np.abs(fft_)
+    power = abs_ ** 2
+
+    # 周波数
+    ts = 1.0 / 100.0
+    freqs = np.fft.fftfreq(power.shape[0], ts)
+    idx = np.argsort(freqs)
+    freqs = freqs[idx]
+
+    def power_max(power, axis=0):
+        return np.max(power, axis=axis)
+
+    def power_2nd(power, axis=0):
+        return np.sort(power, axis=axis)[-2]
+
+    def power_std(power, axis=0):
+        return np.std(power, axis=axis)
+
+    def power_first_quartiles(power, axis=0):
+        return first_quartiles(power, axis)
+
+    def power_median(power, axis=0):
+        return np.median(power, axis=axis)
+
+    def power_third_quartiles(power, axis=0):
+        return third_quartiles(power, axis)
+
+    def power_iqr(power, axis=0):
+        return sp.iqr(power, axis=axis)
+
+    def power_corrcoef(power, axis=0):
+        return corrcoef(power, axis)
+
+    fft_feature = [
+        power_max(power),
+        power_2nd(power),
+        power_std(power),
+        power_first_quartiles(power),
+        power_median(power),
+        power_third_quartiles(power),
+        power_iqr(power),
+        power_corrcoef(power)
+    ]
+
+    fft_feature = np.concatenate(fft_feature)
+    return fft_feature
