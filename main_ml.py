@@ -12,7 +12,7 @@ from tfxtend.metrics import confusion_error_matrix
 
 import dataset
 import features
-import metrics
+import utils
 
 CLASSES = 6
 SEED = 0
@@ -63,6 +63,7 @@ if __name__ == "__main__":
     predict = pipeline.predict(x_test)
 
     # calc metrics
-    metrics.calc_metrics(y_test, predict)
+    utils.calc_metrics(y_test, predict)
 
-    # test data for competition
+    # test for competition
+    utils.test(pipeline)

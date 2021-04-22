@@ -13,7 +13,7 @@ from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
 from tfxtend.keras.callbacks.benckmark import PerformanceLogger
 
 import dataset
-import metrics
+import utils
 
 CLASSES = 6
 
@@ -65,5 +65,5 @@ if __name__ == "__main__":
     predict = np.argmax(predict, axis=1)
 
     # calc metrics
-    metrics.calc_metrics(y_test, predict)
+    utils.calc_metrics(y_test, predict)
 
