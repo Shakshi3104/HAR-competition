@@ -10,7 +10,7 @@ from tensoract.applications.vgg16 import VGG16
 from tensoract.applications.mobilenet import MobileNet
 
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
-from tfxtend.keras.callbacks.benckmark import PerformanceLogger
+from tfxtend.benckmark import PerformanceLogger
 
 import dataset
 import utils

@@ -7,6 +7,8 @@ import random
 from sklearn.pipeline import FeatureUnion, Pipeline
 from sklearn.ensemble import RandomForestClassifier
 
+from tfxtend.benckmark import EstimatorPerformance
+
 import dataset
 import features
 import utils
@@ -62,11 +64,13 @@ if __name__ == "__main__":
     pipeline = Pipeline([('feature_extractor', combined),
                          ('classifier', clf)])
 
+    bench = EstimatorPerformance(pipeline)
+
     # training
-    pipeline.fit(x_train, y_train)
+    bench.fit(x_train, y_train)
 
     # predict
-    predict = pipeline.predict(x_test)
+    predict = bench.predict(x_test)
 
     # calc metrics
     utils.calc_metrics(y_test, predict)
@@ -77,4 +81,6 @@ if __name__ == "__main__":
     # importance
     # importanceの値が高い順に特徴量をソートする
     sorted_features_list = [f for (idx, f) in sorted(zip(np.argsort(clf.feature_importances_), features_list), reverse=True)]
-    print(sorted_features_list)
+    feature_importance = pd.DataFrame({"feature": sorted_features_list,
+                                       "importance": sorted(clf.feature_importances_, reverse=True)})
+    print(feature_importance)
