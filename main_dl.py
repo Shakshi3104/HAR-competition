@@ -17,7 +17,7 @@ import utils
 
 CLASSES = 6
 
-batch = 256
+batch = 128
 epochs = 100
 
 SEED = 0
