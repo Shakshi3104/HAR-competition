@@ -7,7 +7,6 @@ from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.optimizers import Adam
 
 from tensoract.applications.vgg16 import VGG16
-from tensoract.applications.mobilenet import MobileNet
 
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
 from tfxtend.benckmark import PerformanceLogger
@@ -43,7 +42,6 @@ if __name__ == "__main__":
 
     # Load model
     model = VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:])
-    # model = MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:])
     model.compile(optimizer=Adam(learning_rate=1e-3),
                   loss="categorical_crossentropy",
                   metrics=["accuracy"])
