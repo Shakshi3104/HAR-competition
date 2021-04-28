@@ -23,8 +23,8 @@ from models import VGG16_GAP
 
 CLASSES = 6
 
-batch = 64
-epochs = 10
+batch = 128
+epochs = 100
 
 SEED = 0
 
