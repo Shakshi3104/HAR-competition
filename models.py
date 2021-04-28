@@ -2,6 +2,16 @@ from tensorflow.keras.layers import Conv1D, MaxPooling1D, AveragePooling1D, Flat
 from tensorflow.keras.layers import Concatenate
 from tensorflow.keras.models import Model
 
+from tensoract.applications.vgg16 import VGG16
+
+
+def VGG16_GAP(include_top=True, weights=None, input_shape=None, classes=6, classifier_activation='softmax'):
+    backbone = VGG16(include_top=False, weights=None, pooling='avg', input_shape=input_shape)
+    y = Dense(classes, activation=classifier_activation)(backbone.output)
+
+    model = Model(inputs=backbone.input, outputs=y)
+    return model
+
 
 def PoolingNet(input_shape=None, classes=6, classifier_activation='softmax'):
 
