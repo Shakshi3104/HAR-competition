@@ -52,9 +52,9 @@ if __name__ == "__main__":
     models = {
         "VGG16": VGG16(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         "VGG16-GAP": VGG16_GAP(include_top=True, weights=None, input_shape=x_train.shape[1:]),
-        "MobileNet": MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:]),
-        "MobileNetV2": MobileNetV2(include_top=True, weights=None, input_shape=x_train.shape[1:]),
-        "EfficientNet B0": EfficientNetB0(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        # "MobileNet": MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        # "MobileNetV2": MobileNetV2(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        # "EfficientNet B0": EfficientNetB0(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         "ResNet 18": ResNet18(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         "PyramidNet 18": PyramidNet18(include_top=True, weights=None, input_shape=x_train.shape[1:]),
     }
@@ -85,4 +85,8 @@ if __name__ == "__main__":
 
         # calc metrics
         utils.calc_metrics(y_test, predict)
+
+        # test for competition
+        utils.test(model)
+
         print("-" * 40)
