@@ -10,7 +10,7 @@ from tensoract.applications.vgg16 import VGG16
 from tensoract.applications.mobilenet import MobileNet
 from tensoract.applications.mobilenet_v2 import MobileNetV2
 from tensoract.applications.efficientnet import EfficientNetB0
-from tensoract.applications.pyramidnet import PyramidNet18, PyramidNet101
+from tensoract.applications.pyramidnet import PyramidNet18, PyramidNet101, PyramidNet34, PyramidNet50
 from tensoract.applications.resnet import ResNet18
 
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
@@ -58,9 +58,11 @@ if __name__ == "__main__":
         # "VGG16-GAP": VGG16_GAP(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         # "MobileNet": MobileNet(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         # "MobileNetV2": MobileNetV2(include_top=True, weights=None, input_shape=x_train.shape[1:]),
-        "EfficientNet B0": EfficientNetB0(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        # "EfficientNet B0": EfficientNetB0(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         # "ResNet 18": ResNet18(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         # "PyramidNet 18": PyramidNet18(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        "PyramidNet 34": PyramidNet34(include_top=True, weights=None, input_shape=x_train.shape[1:]),
+        # "PyramidNet 50": PyramidNet50(include_top=True, weights=None, input_shape=x_train.shape[1:]),
         # "PyramidNet 101": PyramidNet101(include_top=True, weights=None, input_shape=x_train.shape[1:]),
     }
 

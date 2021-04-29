@@ -44,8 +44,16 @@ Random Forest
 
 ## Deep learning
 
+[main_dl.py](main_dl.py)
+
 ### Model architecture
 
+PyramidNet 34
+
+- Implementation: [TensorFlow_CNN_Collections_for_HASC.applications.pyramidnet.PyramidNet34](https://github.com/haselab-dev/TensorFlow_CNN_Collections_for_HASC/blob/master/applications/pyramidnet.py)
+
 ### Accuracy
+
+0.93320
 
 

@@ -9,9 +9,10 @@ from tensorflow.keras.optimizers import Adam
 from tfxtend.keras.callbacks import ConfusionMatrixLogger, FMeasureLogger
 from tfxtend.benckmark import PerformanceLogger
 
+from tensoract.applications.pyramidnet import PyramidNet34
+
 import dataset
 import utils
-from models import VGG16_GAP
 
 CLASSES = 6
 
@@ -40,7 +41,7 @@ if __name__ == "__main__":
     print(y_test_.shape)
 
     # Load model
-    model = VGG16_GAP(include_top=True, weights=None, input_shape=x_train.shape[1:])
+    model = PyramidNet34(include_top=True, weights=None, input_shape=x_train.shape[1:])
     model.compile(optimizer=Adam(learning_rate=1e-3),
                   loss="categorical_crossentropy",
                   metrics=["accuracy"])

@@ -6,10 +6,21 @@ from tensoract.applications.vgg16 import VGG16
 
 
 def VGG16_GAP(include_top=True, weights=None, input_shape=None, classes=6, classifier_activation='softmax'):
-    backbone = VGG16(include_top=False, weights=None, pooling='avg', input_shape=input_shape)
+    backbone = VGG16(include_top=False, weights=weights, pooling='avg', input_shape=input_shape)
     y = Dense(classes, activation=classifier_activation)(backbone.output)
 
     model = Model(inputs=backbone.input, outputs=y)
+    return model
+
+
+def VGG16_GAP_HCF(include_top=True, weights=None, input_shape=None, num_features=72, classes=6, classifier_activation='softmax'):
+    backbone = VGG16(include_top=False, weights=weights, pooling='avg', input_shape=input_shape)
+
+    inputs_hcf = Input(shape=(num_features,))
+    x = Concatenate()([backbone.output, inputs_hcf])
+    y = Dense(classes, activation=classifier_activation)(x)
+
+    model = Model(inputs=[backbone.input, inputs_hcf], outputs=y)
     return model
 
 
