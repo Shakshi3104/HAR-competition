@@ -20,7 +20,7 @@ def calc_metrics(y_true, y_pred, labels=["stay", "walk", "jog", "skip", "stUp", 
 def test(model, path="./HASC_Apple_100/配布用/test/"):
     print("evaluate test...")
     files = list(Path(path).glob('*.csv'))
-    x = np.array([pd.read_csv(f).values.copy() for f in files])
+    x = np.array([pd.read_csv(f).values.copy() for f in files]).astype(np.float32)
 
     predict = model.predict(x)
 
